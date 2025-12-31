@@ -171,11 +171,15 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\StudentController.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Customer.cs">
+      <DependentUpon>TestEF.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Student.cs">
       <DependentUpon>TestEF.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\TestEF.Context.cs">

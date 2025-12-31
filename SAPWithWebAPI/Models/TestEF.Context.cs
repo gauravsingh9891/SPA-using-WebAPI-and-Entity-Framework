@@ -26,5 +26,6 @@ namespace SAPWithWebAPI.Models
         }
     
         public virtual DbSet<Customer> Customers { get; set; }
+        public virtual DbSet<Student> Students { get; set; }
     }
 }
