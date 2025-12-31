@@ -6,9 +6,11 @@ using System.Net.Http;
 using System.Web.Http;
 using SAPWithWebAPI.Models;
 using System.Data.Entity;
+using System.Web.Http.Cors;
 
 namespace SAPWithWebAPI.Controllers
 {
+    [EnableCors("*","*","*")]
     public class CustomerController : ApiController
     {
         MVCDBEntities dc = new MVCDBEntities();
