@@ -1,0 +1,173 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <script src="~/Scripts/jquery-3.7.1.min.js"></script>
+    <script>
+        //Logic to Display all customer Details
+        function GetCustomers() {
+            $.ajax({
+                url: 'http://localhost/SAPWithWebApi/api/Customer',
+                type: 'get',
+                dataype: 'json',
+                success: BuildTable,
+                error: DisplayError
+            });
+        }
+
+        //This method is building data row along with data and calling by GetCustomers()
+        function BuildTable(Customers) {
+            $('#tblCustomers tbody').empty();   //Clearing the tbody because, to remove the old duplicate values
+
+            //Foreach loop
+            $.each(Customers, function (Index, Customer) {
+                            var Status = (Customer.Status) ? 'Active' : 'In-Active';
+                            $("#tblCustomers").append('<tr><td>' + Customer.Custid + '</td><td>' + Customer.Name + '</td><td align="center">' + Customer.Balance + '</td><td>' + Customer.City + '</td><td align="center">' + Status+'</td></tr>')
+                        });
+        }
+
+        //This method is called when any occured by functions
+        function DisplayError() {
+            window.alert("Error on the server, could not load the data");
+        }
+
+        //Logic to display customer display based on id
+        function GetCustomer() {
+            $.ajax({
+                url: 'http://localhost/SAPWithWebApi/api/Customer',     //Here also we can pass value in the form of querystring
+                type: 'get',
+                datatype: 'json',
+                data: {                         //using Data parameter, we can pass multiple values or single also (Way 1: to pass value)
+                    'id':$('#Custid').val()
+                },
+                success: function (Customer)        //Anonymous method
+                {  
+                    if (Customer == null) {
+                        window.alert("No Customer exists with the given id.");
+                        $("#frmCustomer").trigger("reset");     //Reset button click implicitly
+                        $("#Cusid").focus();
+                    }
+                    else {
+                        $('#Name').val(Customer.Name);
+                        $('#Balance').val(Customer.Balance);
+                        $('#City').val(Customer.City);
+                    }
+                },
+                error: DisplayError
+            });
+        }
+
+        //Logic to add customer
+        function AddCustomer() {
+            $.ajax({
+                url: 'http://localhost/SAPWithWebApi/api/Customer',
+                type: 'post',
+                datatype: 'json',
+                data: $('#frmCustomer').serialize(),    //This will build json string of customer record
+                success: ClearAndLoad,
+                error: DisplayError
+            });
+        }
+
+        //Logic to Update customer record
+        function UpdateCustomer() {
+            $.ajax({
+                url: 'http://localhost/SAPWithWebApi/api/Customer',
+                type: 'put',
+                datatype: 'json',
+                data: $('#frmCustomer').serialize(),
+                success: ClearAndLoad,
+                error: DisplayError
+            });
+        }
+
+        //Logic to Delete the customer record
+        function DeleteCustomer() {
+            $.ajax({
+                url: 'http://localhost/SAPWithWebApi/api/Customer/' + $('#Custid').val(),   //Way 2  to pass value by concatenation with url to api method   
+                type: 'delete',
+                datatype: 'json',
+                success: ClearAndLoad,
+                error:DisplayError
+            });
+        }
+
+        //function for Clear the textbox's data and Load the operation result into table
+        function ClearAndLoad() {
+            $('#frmCustomer').trigger("reset");      //It will clear the all html input controls data
+            GetCustomers();    //re-load the data into form
+            $('#Custid').focus();   //shifting focus on Customer Id textbox
+        }
+    </script>
+</head>
+<body onload="GetCustomers()">
+    <table width="100%">
+        <tr>
+            <!--1st Table-->
+            <td valign="top">
+                <table border="1" align="center" id="tblCustomers">
+                    <caption>Customer Details</caption>
+                    <thead>
+                        <tr>
+                            <th>Custid</th>
+                            <th>Name</th>
+                            <th>Balance</th>
+                            <th>City</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </td>
+
+            <!--2nd Table-->
+            <td valign="top">
+                <form id="frmCustomer">
+                    <table align="center">
+                        <caption>Customer Editing</caption>
+                        <tr>
+                            <td><label for="Custid">Customer ID:</label></td>
+                            <td>
+                                <input type="text" id="Custid" name="Custid" />
+                                <input type="button" value="..." onclick="GetCustomer()"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><label for="Name">Customer Name:</label></td>
+                            <td>
+                                <input type="text" id="Name" name="Name" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><label for="Balance">Balance:</label></td>
+                            <td>
+                                <input type="number" id="Balance" name="Balance" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><label for="City">City:</label></td>
+                            <td>
+                                <input type="text" id="City" name="City" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" align="center">
+                                <input type="button" id="btnInsert" name="btnInsert" value="Insert" onclick="AddCustomer()"/>
+                                <input type="button" id="btnUpdate" name="btnUpdate" value="Update" onclick="UpdateCustomer()"/>
+                                <input type="button" id="btnDelete" name="btnDelete" value="Delete" onclick="DeleteCustomer()"/>
+                                <input type="reset" value="Clear"/>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
