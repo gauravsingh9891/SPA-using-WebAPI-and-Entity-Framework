@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace SAPWithWebAPI
 {
@@ -20,7 +21,12 @@ namespace SAPWithWebAPI
                 defaults: new { id = RouteParameter.Optional }
             );
 
-            config.EnableCors();
+            //Enabling CORS at controller level
+            //config.EnableCors();
+
+            //Enabling CORS at Application Level
+            EnableCorsAttribute obj = new EnableCorsAttribute("*", "*", "*");
+            config.EnableCors(obj);
         }
     }
 }

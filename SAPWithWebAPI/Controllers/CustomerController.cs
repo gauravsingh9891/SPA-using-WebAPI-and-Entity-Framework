@@ -10,7 +10,7 @@ using System.Web.Http.Cors;
 
 namespace SAPWithWebAPI.Controllers
 {
-    [EnableCors("*","*","*")]
+    //[EnableCors("*","*","*")]         //Controller Level
     public class CustomerController : ApiController
     {
         MVCDBEntities dc = new MVCDBEntities();
