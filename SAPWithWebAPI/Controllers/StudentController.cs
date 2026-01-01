@@ -1,11 +1,11 @@
-﻿using System;
+﻿using SAPWithWebAPI.Models;
+using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using SAPWithWebAPI.Models;
-using System.Data.Entity;
 
 namespace SAPWithWebAPI.Controllers
 {
@@ -16,7 +16,7 @@ namespace SAPWithWebAPI.Controllers
         //GET Request (SELECT operation performed to display all students records)
         public List<Student> Get()
         {
-            return dc.Students.ToList();
+            return dc.Students.Where(S=>S.Status==true).ToList();
         }
 
         //GET Request (SELECT operation performed to display single student details based on Id passed)
